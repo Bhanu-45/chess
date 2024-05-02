@@ -43,6 +43,8 @@ public class ChessGameModel {
 
     public void movePiece(int startX, int startY, int endX, int endY) {
         // Move piece logic
+        board[endX][endY] = board[startX][startY];
+        board[startX][startY] = null;
     }
 
     public ChessPiece[][] getBoard(){
