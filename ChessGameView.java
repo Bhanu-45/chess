@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 
 public class ChessGameView {
@@ -23,6 +24,8 @@ public class ChessGameView {
 
 class ChessBoardPanel extends JPanel {
     private JLabel[][] squares;
+    private int selectedX, selectedY;
+    private boolean pieceSelected = false;
     public int tileSize = 85;
     public int cols = 8;
     public int rows = 8;
@@ -39,18 +42,19 @@ class ChessBoardPanel extends JPanel {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 squares[i][j] = new JLabel();
-                squares[i][j].setPreferredSize(new Dimension(64, 64)); // Set square size
-    
-                // Alternate square colors
-                //if ((i + j) % 2 == 0) {
-                //    squares[i][j].setBackground(ColorEnum.ATHS_SPECIAL.getColor());
-                //} else {
-                //    squares[i][j].setBackground(ColorEnum.ASPARAGUS.getColor());
-                //}
+                squares[i][j].setPreferredSize(new Dimension(64, 64)); // Set square size.
     
                 add(squares[i][j]);
+
+                int finalI = i;
+                int finalJ = j;
+                squares[i][j].addMouseListener(new MouseAdapter() {
+                    public void mouseClicked(MouseEvent e) {
+                        handleChessSquareClick(finalI, finalJ);
+                    }
+                });
             }
-            }
+        }
     }
 
     public void updateBoard(ChessPiece[][] board) {
@@ -75,81 +79,39 @@ class ChessBoardPanel extends JPanel {
             }
         }
     }
-    
 
-    /* 
-    public void paint(Graphics g){
-        super.paintComponent(g);
-        Graphics2D g2d = (Graphics2D) g;
-
-        // Paint board
-        for (int r = 0; r < rows; r++)
-            for (int c = 0; c < cols; c++) {
-                g2d.setColor((c + r) % 2 == 0 ? ColorEnum.ATHS_SPECIAL.getColor() : ColorEnum.ASPARAGUS.getColor());
-                g2d.fillRect(c * tileSize, r * tileSize, tileSize, tileSize);
+    private void handleChessSquareClick(int x, int y) {
+        if (!pieceSelected) {
+            // Select the piece
+            if (squares[x][y].getIcon() != null) {
+                selectedX = x;
+                selectedY = y;
+                pieceSelected = true;
+                squares[x][y].setBackground(Color.YELLOW); // Highlight the selected square
             }
-
-        // Paint selected piece highlight
-        if (selectedPiece != null) {
-            Color highlightColor;
-            if (selectedPiece.isWhite) {
-                highlightColor = new Color(0xB9CA70);
+        } else {
+            // Move the piece
+            if (x == selectedX && y == selectedY) {
+                // Click the same square again to deselect
+                pieceSelected = false;
+               // squares[x][y].setBackground((x + y) % 2 == 0 ? ColorEnum.ATHS_SPECIAL.getColor() : ColorEnum.ASPARAGUS.getColor());
             } else {
-                highlightColor = new Color(0xF5F682);
+                // Validate the move here (you'll need to add your own logic)
+                movePiece(selectedX, selectedY, x, y);
+                pieceSelected = false;
             }
-        g2d.setColor(highlightColor);
-        //g2d.fillRect(selectedPiece.col * tileSize, selectedPiece.row * tileSize, tileSize, tileSize);
         }
-
-        // Paint pieces
-        for (ChessPiece piece : pieceList) {
-            piece.paint(g2d);
-        };
-
-
     }
 
-    /* 
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2d = (Graphics2D) g;
+    private void movePiece(int startX, int startY, int endX, int endY) {
+        ImageIcon icon = (ImageIcon) squares[startX][startY].getIcon();
+        squares[endX][endY].setIcon(icon);
+        squares[startX][startY].setIcon(null);
+        // Reset background colors
+        squares[startX][startY].setBackground((startX + startY) % 2 == 0 ? ColorEnum.ATHS_SPECIAL.getColor() : ColorEnum.ASPARAGUS.getColor());
+        squares[endX][endY].setBackground((endX + endY) % 2 == 0 ? ColorEnum.ATHS_SPECIAL.getColor() : ColorEnum.ASPARAGUS.getColor());
 
-        // Paint board
-        for (int r = 0; r < rows; r++)
-            for (int c = 0; c < cols; c++) {
-                g2d.setColor((c + r) % 2 == 0 ? ColorEnum.ATHS_SPECIAL.getColor() : ColorEnum.ASPARAGUS.getColor());
-                g2d.fillRect(c * tileSize, r * tileSize, tileSize, tileSize);
-            };
-
-        // Paint selected piece highlight
-        if (selectedPiece != null) {
-            Color highlightColor;
-            if ((selectedPiece.col + selectedPiece.row) % 2 == 0) {
-                highlightColor = new Color(0xB9CA70);
-            } else {
-                highlightColor = new Color(0xF5F682);
-            }
-            g2d.setColor(highlightColor);
-            g2d.fillRect(selectedPiece.col * tileSize, selectedPiece.row * tileSize, tileSize, tileSize);
-        };
-
-        // Paint Highlights
-        if (selectedPiece != null) {
-            for (int r = 0; r < rows; r++) {
-                for (int c = 0; c < cols; c++) {
-                    if (isValidMove(new Move(this, selectedPiece, c, r))) {
-                        g2d.setColor(Color.WHITE);
-                        g2d.setStroke(new BasicStroke(3));
-                        g2d.drawRect(c * tileSize, r * tileSize, tileSize, tileSize);
-                    };
-                };
-            };
-        };
-
-        // Paint pieces
-        for (ChessPiece piece : pieceList) {
-            piece.paint(g2d);
-        };
-    };
-    */
+        
+    }
+    
 }
