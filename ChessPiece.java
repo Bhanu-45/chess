@@ -1,3 +1,4 @@
+import java.awt.*;
 import javax.swing.*;
 
 public abstract class ChessPiece {
@@ -10,15 +11,26 @@ public abstract class ChessPiece {
 
     public abstract boolean canMove(int startX, int startY, int endX, int endY);
 
-    public ImageIcon getImage() {
+    public Image getImage() {
+        return image.getImage();
+    }
+
+    public ImageIcon getImageIcon() {
         return image;
+    }
+
+    public ImageIcon reSHape(ImageIcon imageIcon){
+        Image image = imageIcon.getImage(); // transform it 
+        Image newimg = image.getScaledInstance(75, 75,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+        imageIcon = new ImageIcon(newimg);  // transform it back
+        return imageIcon;
     }
 }
 
 class Pawn extends ChessPiece {
     public Pawn(boolean isWhite) {
         super(isWhite);
-        this.image = new ImageIcon(getClass().getResource(isWhite ? "/images/wp.png" : "/images/bp.png"));
+        this.image = reSHape(new ImageIcon(getClass().getResource(isWhite ? "/images/wp.png" : "/images/bp.png")));
     }
 
     @Override
@@ -31,7 +43,7 @@ class Pawn extends ChessPiece {
 class Rook extends ChessPiece {
     public Rook(boolean isWhite) {
         super(isWhite);
-        this.image = new ImageIcon(getClass().getResource(isWhite ? "/images/wr.png" : "/images/br.png"));
+        this.image = reSHape(new ImageIcon(getClass().getResource(isWhite ? "/images/wr.png" : "/images/br.png")));
     }
 
     @Override
@@ -44,7 +56,7 @@ class Rook extends ChessPiece {
 class Knight extends ChessPiece {
     public Knight(boolean isWhite) {
         super(isWhite);
-        this.image = new ImageIcon(getClass().getResource(isWhite ? "/images/wk.png" : "/images/bk.png"));
+        this.image = reSHape(new ImageIcon(getClass().getResource(isWhite ? "/images/wn.png" : "/images/bn.png")));
     }
 
     @Override
@@ -57,7 +69,7 @@ class Knight extends ChessPiece {
 class Bishop extends ChessPiece {
     public Bishop(boolean isWhite) {
         super(isWhite);
-        this.image = new ImageIcon(getClass().getResource(isWhite ? "/images/wb.png" : "/images/bb.png"));
+        this.image = reSHape(new ImageIcon(getClass().getResource(isWhite ? "/images/wb.png" : "/images/bb.png")));
     }
 
     @Override
@@ -70,7 +82,7 @@ class Bishop extends ChessPiece {
 class Queen extends ChessPiece {
     public Queen(boolean isWhite) {
         super(isWhite);
-        this.image = new ImageIcon(getClass().getResource(isWhite ? "/images/wq.png" : "/images/bq.png"));
+        this.image = reSHape(new ImageIcon(getClass().getResource(isWhite ? "/images/wq.png" : "/images/bq.png")));
     }
 
     @Override
@@ -83,7 +95,7 @@ class Queen extends ChessPiece {
 class King extends ChessPiece {
     public King(boolean isWhite) {
         super(isWhite);
-        this.image = new ImageIcon(getClass().getResource(isWhite ? "/images/wk.png" : "/images/bk.png"));
+        this.image = reSHape(new ImageIcon(getClass().getResource(isWhite ? "/images/wk.png" : "/images/bk.png")));
     }
 
     @Override

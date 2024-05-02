@@ -1,4 +1,3 @@
-import javax.swing.JPanel;
 
 public class ChessGameModel {
     private ChessPiece[][] board;
@@ -34,22 +33,8 @@ public class ChessGameModel {
         board[7][5] = ChessPieceFactory.createPiece(PieceType.BISHOP, false);
         board[7][3] = ChessPieceFactory.createPiece(PieceType.QUEEN, false);
         board[7][4] = ChessPieceFactory.createPiece(PieceType.KING, false);
+        
 
-            for (int i = 0; i < 8; i++) {
-        for (int j = 0; j < 8; j++) {
-            JPanel square = new JPanel(new BorderLayout());
-            square.setPreferredSize(new Dimension(64, 64)); // Set square size
-
-            // Alternate square colors
-            if ((i + j) % 2 == 0) {
-                square.setBackground(Color.WHITE);
-            } else {
-                square.setBackground(Color.GREEN);
-            }
-
-            add(square);
-        }
-    }
     }
 
     public ChessPiece getPieceAt(int x, int y) {

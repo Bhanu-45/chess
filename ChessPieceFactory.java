@@ -23,3 +23,9 @@ enum PieceType {
     PAWN, ROOK, KNIGHT, BISHOP, QUEEN, KING
 }
 
+/* 
+enum Color {
+    WHITE, BLACK
+}
+*/
+
