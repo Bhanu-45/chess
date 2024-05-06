@@ -1,4 +1,3 @@
-import javax.swing.JPanel;
 
 public class ChessGameModel {
     private ChessPiece[][] board;
@@ -10,6 +9,9 @@ public class ChessGameModel {
 
     private void initializeBoard() {
         // Initialize white pieces
+
+
+
         for (int i = 0; i < 8; i++) {
             board[1][i] = ChessPieceFactory.createPiece(PieceType.PAWN, true);
         }
@@ -34,22 +36,10 @@ public class ChessGameModel {
         board[7][5] = ChessPieceFactory.createPiece(PieceType.BISHOP, false);
         board[7][3] = ChessPieceFactory.createPiece(PieceType.QUEEN, false);
         board[7][4] = ChessPieceFactory.createPiece(PieceType.KING, false);
+        
+        //print the board.
+        printBoard();
 
-            for (int i = 0; i < 8; i++) {
-        for (int j = 0; j < 8; j++) {
-            JPanel square = new JPanel(new BorderLayout());
-            square.setPreferredSize(new Dimension(64, 64)); // Set square size
-
-            // Alternate square colors
-            if ((i + j) % 2 == 0) {
-                square.setBackground(Color.WHITE);
-            } else {
-                square.setBackground(Color.GREEN);
-            }
-
-            add(square);
-        }
-    }
     }
 
     public ChessPiece getPieceAt(int x, int y) {
@@ -58,9 +48,19 @@ public class ChessGameModel {
 
     public void movePiece(int startX, int startY, int endX, int endY) {
         // Move piece logic
+        board[endX][endY] = board[startX][startY];
+        board[startX][startY] = null;
     }
 
     public ChessPiece[][] getBoard(){
         return board;
+    }
+
+    public void printBoard(){
+        for(int i=0;i<8;i++){
+            for(int j=0;j<8;j++){
+                System.out.println(this.board[i][j]);
+            }
+        }
     }
 }
